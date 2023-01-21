@@ -1,22 +1,12 @@
 import { useState } from "react";
-import {
-	Button,
-	FlatList,
-	ScrollView,
-	StyleSheet,
-	Text,
-	TextInput,
-	View,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
-	const [enteredGoalText, setEnteredGoalText] = useState("");
 	const [courseGoals, setCourseGoals] = useState([]);
 
-	function goalInputHandler(enteredText) {
-		setEnteredGoalText(enteredText);
-	}
-	function addGoalHandler(enteredGoa) {
+	function addGoalHandler(enteredGoalText) {
 		setCourseGoals((prevGoals) => [
 			...prevGoals,
 			{ text: enteredGoalText, id: Math.random().toString() },
@@ -24,19 +14,12 @@ export default function App() {
 	}
 	return (
 		<View style={styles.appContainer}>
-			<View style={styles.inputContainer}>
-				<TextInput
-					onChangeText={goalInputHandler}
-					style={styles.textInput}
-					placeholder="Your course goal!"
-				></TextInput>
-				<Button onPress={addGoalHandler} title="Add Goal"></Button>
-			</View>
+			<GoalInput onAddGoal={addGoalHandler}></GoalInput>
 			<View style={styles.goalsContainer}>
 				<FlatList
 					data={courseGoals}
 					renderItem={(itemData) => {
-						return <Text style={styles.goalItem}>{itemData.item.text}</Text>;
+						return <GoalItem text={itemData.item.text}></GoalItem>;
 					}}
 					keyExtractor={(item, index) => {
 						return item.id;
@@ -60,35 +43,8 @@ const styles = StyleSheet.create({
 		paddingTop: 50,
 		paddingHorizontal: 16,
 	},
-	inputContainer: {
-		flex: 1,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		borderRadius: 10,
-		alignItems: "center",
-		paddingBottom: 25,
-		borderBottomWidth: 1,
-		borderBottomColor: "#cccccc",
-		marginBottom: 24,
-	},
-	textInput: {
-		borderWidth: 1,
-		borderColor: "#cccccc",
-		width: "70%",
-		borderRadius: 10,
-		marginRight: 8,
-		padding: 8,
-	},
+
 	goalsContainer: {
 		flex: 4,
-	},
-
-	goalItem: {
-		margin: 5,
-		padding: 15,
-		borderRadius: 25,
-		backgroundColor: "#d1d1d1ff",
-		color: "#00001d",
-		fontSize: 20,
 	},
 });
